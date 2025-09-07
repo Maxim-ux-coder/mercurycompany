@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Путь алхимика - Погружение в магию и творчество</title>
+    <meta name="description" content="Уникальная мобильная игра от Techno Maggie и Mercury Company. Создавайте миры, открывайте рецепты, развивайте алхимическую империю!">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle at center, #1a0f3a 0%, #0d0618 50%, #000000 100%);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .magical-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: alchemyFloat 6s ease-in-out infinite;
+        }
+
+        .particle.fire { background: linear-gradient(45deg, #ff6b35, #f39c12); }
+        .particle.water { background: linear-gradient(45deg, #3498db, #74b9ff); }
+        .particle.earth { background: linear-gradient(45deg, #27ae60, #2ecc71); }
+        .particle.air { background: linear-gradient(45deg, #9b59b6, #e74c3c); }
+
+        @keyframes alchemyFloat {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); 
+                opacity: 0.7; 
+            }
+            25% { 
+                transform: translateY(-40px) translateX(30px) rotate(90deg) scale(1.2); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: translateY(-20px) translateX(-20px) rotate(180deg) scale(0.8); 
+                opacity: 0.9; 
+            }
+            75% { 
+                transform: translateY(-60px) translateX(15px) rotate(270deg) scale(1.1); 
+                opacity: 0.8; 
+            }
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0f3a, #2d1b69, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10000;
+            animation: fadeOut 1s ease-in-out 4s forwards;
+        }
+
+        .alchemy-intro {
+            text-align: center;
+            animation: mysticalAppear 2s ease-out;
+        }
+
+        .alchemy-intro h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e74c3c, #9b59b6, #3498db);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: alchemyGradient 3s ease-in-out infinite;
+        }
+
+        .alchemy-intro p {
+            font-size: 1.5rem;
+            color: #f39c12;
+            margin-bottom: 1rem;
+            animation: typewriterMagic 2.5s steps(40) 1s forwards;
+            width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .magic-symbols {
+            font-size: 2rem;
+            animation: symbolRotate 4s linear infinite;
+        }
+
+        @keyframes mysticalAppear {
+            from { opacity: 0; transform: scale(0.5) rotate(-180deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes alchemyGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes typewriterMagic {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes symbolRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        .main-content {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 4.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 15, 58, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 1rem 0;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(243, 156, 18, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { filter: brightness(1) drop-shadow(0 0 10px rgba(243, 156, 18, 0.5)); }
+            to { filter: brightness(1.3) drop-shadow(0 0 20px rgba(243, 156, 18, 0.8)); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(243, 156, 18, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-links a:hover:before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(243, 156, 18, 0.2) 0%, transparent 70%);
+            animation: alchemyPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes alchemyPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.4; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 0.7; }
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e74c3c, #9b59b6);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInUp 1s ease-out 5s both, alchemyGradient 4s ease-in-out infinite;
+        }
+
+        .hero-content .subtitle {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #f39c12;
+            animation: slideInUp 1s ease-out 5.3s both;
+        }
+
+        .hero-content p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            color: #ccc;
+            max-width: 800px;
+            animation: slideInUp 1s ease-out 5.6s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: all 0.4s ease;
+            animation: slideInUp 1s ease-out 5.9s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-button:hover:before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.5);
+            background: linear-gradient(45deg, #e74c3c, #9b59b6);
+        }
+
+        .features-section {
+            padding: 6rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #f39c12;
+            margin-bottom: 4rem;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(243, 156, 18, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(231, 76, 60, 0.8)); }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            background: rgba(26, 15, 58, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(243, 156, 18, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: cardAppear 0.8s ease-out;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(40px) rotateX(45deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotateX(0deg);
+            }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(243, 156, 18, 0.3);
+            border-color: rgba(243, 156, 18, 0.8);
+            background: rgba(26, 15, 58, 0.8);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(243, 156, 18, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+            animation: alchemyShimmer 2s linear infinite;
+        }
+
+        @keyframes alchemyShimmer {
+            0% { transform: rotate(45deg) translateX(-200%); }
+            100% { transform: rotate(45deg) translateX(200%); }
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .feature-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .feature-description {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .gameplay-section {
+            padding: 6rem 0;
+            background: rgba(26, 15, 58, 0.3);
+        }
+
+        .gameplay-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .gameplay-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .gameplay-item {
+            background: rgba(243, 156, 18, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .gameplay-item:hover {
+            background: rgba(243, 156, 18, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .gameplay-item h4 {
+            color: #f39c12;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .updates-section {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .updates-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .update-list {
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .update-list li {
+            color: #ccc;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .update-list li:before {
+            content: '⚗️';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(26, 15, 58, 0.95);
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+                background: none;
+                border: none;
+                color: #fff;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-card {
+                padding: 2rem;
+            }
+
+            .particle {
+                animation-duration: 12s;
+            }
+        }
+
+        .footer {
+            background: rgba(26, 15, 58, 0.9);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 2px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer p {
+            color: #ccc;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .company-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .company-links a {
+            color: #f39c12;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .company-links a:hover {
+            background: rgba(243, 156, 18, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="alchemy-intro">
+            <h1>Путь алхимика</h1>
+            <p>Погружение в магию и творчество</p>
+            <div class="magic-symbols">⚗️ 🔥 🌿 ⚡</div>
+        </div>
+    </div>
+
+    <div class="magical-particles" id="particles"></div>
+
+    <div class="main-content">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">⚗️ Путь алхимика</div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#features">Возможности</a></li>
+                    <li><a href="#gameplay">Геймплей</a></li>
+                    <li><a href="#updates">Обновления</a></li>
+                    <li><a href="#companies">Разработчики</a></li>
+                </ul>
+                <button class="mobile-menu" id="mobileMenu">☰</button>
+            </div>
+        </nav>
+
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1>🔥 Путь алхимика 🔥</h1>
+                <p class="subtitle">Погружение в магию и творчество!</p>
+                <p>
+                    Уникальная игра от студий Techno Maggie и Mercury Company, 
+                    вдохновленная мудростью старых мастеров алхимии. 
+                    Здесь ваше воображение и мастерство становятся главным оружием! ✨
+                </p>
+                <a href="#features" class="cta-button">Начать путешествие</a>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <h2 class="section-title">🆕 Что ждёт вас в игре?</h2>
+            <p class="section-subtitle">Исследуйте, творите, развивайтесь!</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Создание собственных миров</h3>
+                    <p class="feature-description">
+                        Начните с простых элементов: облака, пар, ветер. 
+                        Постепенно открывайте всё более сложные вещества — 
+                        сталь, электричество и даже механизмы.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">Рецепты и эксперименты</h3>
+                    <p class="feature-description">
+                        Каждое открытие приносит вам не только новые знания, 
+                        но и доход 💵. Чем больше исследуете — тем богаче становитесь!
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Экономическая стратегия</h3>
+                    <p class="feature-description">
+                        • Доход за новые открытия<br>
+                        • Бустеры, увеличивающие прибыль на +0.05% за каждое улучшение ⚡<br>
+                        • Алхимический стол для открытия новых ячеек — рецепты с до 12 ингредиентов!
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3 class="feature-title">Живой мир алхимии</h3>
+                    <p class="feature-description">
+                        Создавайте растения и семена, развивайте фермерство, 
+                        выращивайте деревья и органику. Постройте собственную экосистему!
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⛏️</div>
+                    <h3 class="feature-title">Металлы и инструменты</h3>
+                    <p class="feature-description">
+                        Добывайте руды, переплавляйте железо, 
+                        создавайте прочные инструменты для развития.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔋</div>
+                    <h3 class="feature-title">Энергия и электричество</h3>
+                    <p class="feature-description">
+                        Комбинируйте элементы, генерируйте энергию, 
+                        открывайте электричество и создавайте устройства — 
+                        от лампочек до сложных механизмов.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="gameplay-section" id="gameplay">
+            <div class="gameplay-content">
+                <h2 class="section-title">⚙️ Глубина геймплея</h2>
+                <p style="font-size: 1.4rem; color: #ccc; margin-bottom: 2rem;">
+                    «Путь Алхимика» — это сочетание творчества, стратегии и исследований. 
+                    Здесь именно вы выбираете свой путь: развивать науку, сельское хозяйство 
+                    или энергетику. Каждое решение — шаг к званию Великого Мастера Алхимии! 🧑‍🔬
+                </p>
+
+                <div class="gameplay-grid">
+                    <div class="gameplay-item">
+                        <h4>🔬 Научный путь</h4>
+                        <p>Исследуйте химические реакции, открывайте новые элементы, создавайте сложные соединения</p>
+                    </div>
+                    <div class="gameplay-item">
+                        <h4>🌾 Путь фермера</h4>
+                        <p>Развивайте сельское хозяйство, выращивайте уникальные растения, создавайте органические вещества</p>
+                    </div>
+                    <div class="gameplay-item">
+                        <h4>⚡ Энергетический путь</h4>
+                        <p>Генерируйте энергию, создавайте электрические устройства, управляйте энергетическими потоками</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="updates-section" id="updates">
+            <div class="updates-content">
+                <h2 class="section-title">📦 Что впереди?</h2>
+                <p style="font-size: 1.3rem; color: #ccc; margin-bottom: 2rem;">
+                    Разработчики готовят новые обновления:
+                </p>
+                
+                <ul class="update-list">
+                    <li>Ещё больше ингредиентов и рецептов</li>
+                    <li>Новые биомы и механики</li>
+                    <li>Расширение алхимических возможностей</li>
+                    <li>Мультиплеерные элементы</li>
+                    <li>Система достижений и рейтингов</li>
+                </ul>
+
+                <div style="margin-top: 3rem; padding: 2rem; background: rgba(243, 156, 18, 0.1); border-radius: 15px; border: 2px solid rgba(243, 156, 18, 0.3);">
+                    <h3 style="color: #f39c12; font-size: 2rem; margin-bottom: 1rem;">✨ Заключение</h3>
+                    <p style="font-size: 1.3rem; color: #ccc;">
+                        «Путь Алхимика» — это не просто игра. Это ваше путешествие к тайнам природы, 
+                        экспериментам и созданию собственного мира.<br><br>
+                        <strong style="color: #f39c12;">Готовы раскрыть секреты алхимии и построить свою империю знаний? 🌌</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer" id="companies">
+            <div class="footer-content">
+                <h3 style="color: #f39c12; font-size: 2rem; margin-bottom: 2rem;">Разработчики</h3>
+                <p>Игра создана совместными усилиями двух компаний:</p>
+                <p><strong>Techno Maggie</strong> — управляющая компания и издатель</p>
+                <p><strong>Mercury Company</strong> — студия разработки</p>
+                
+                <div class="company-links">
+                    <a href="index.html">Techno Maggie</a>
+                    <a href="mercury.html">Mercury Company</a>
+                </div>
+                
+                <p style="margin-top: 2rem;">&copy; 2025 Путь алхимика. Все права защищены.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Создание магических частиц
+        function createMagicalParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = window.innerWidth > 768 ? 25 : 12;
+            const particleTypes = ['fire', 'water', 'earth', 'air'];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = `particle ${particleTypes[Math.floor(Math.random() * particleTypes.length)]}`;
+                
+                const size = Math.random() * 8 + 4;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Мобильное меню
+        document.getElementById('mobileMenu').addEventListener('click', function() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        });
+
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                // Закрыть мобильное меню при клике
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Эффект параллакса для навбара
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(26, 15, 58, 0.95)';
+                navbar.style.borderBottomColor = 'rgba(243, 156, 18, 0.5)';
+            } else {
+                navbar.style.background = 'rgba(26, 15, 58, 0.9)';
+                navbar.style.borderBottomColor = 'rgba(243, 156, 18, 0.3)';
+            }
+        });
+
+        // Анимация появления карточек при скролле
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
+                }
+            });
+        }, observerOptions);
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            createMagicalParticles();
+            
+            // Наблюдение за карточками функций
+            document.querySelectorAll('.feature-card').forEach(card => {
+                observer.observe(card);
+            });
+            
+            // Адаптация частиц под размер экрана
+            window.addEventListener('resize', function() {
+                const particlesContainer = document.getElementById('particles');
+                particlesContainer.innerHTML = '';
+                createMagicalParticles();
+            });
+        });
+
+        // Улучшенные hover эффекты для карточек
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-20px) scale(1.03) rotateX(-5deg)';
+                this.style.boxShadow = '0 30px 60px rgba(243, 156, 18, 0.4)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Интерактивные иконки
+        document.querySelectorAll('.feature-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                this.style.animation = 'iconPulse 0.6s ease-in-out';
+                setTimeout(() => {
+                    this.style.animation = 'iconPulse 2s ease-in-out infinite';
+                }, 600);
+            });
+        });
+
+        // Дополнительные магические эффекты
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                // Создание дополнительных частиц при наведении на кнопку
+                for (let i = 0; i < 5; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.style.position = 'absolute';
+                    sparkle.style.width = '4px';
+                    sparkle.style.height = '4px';
+                    sparkle.style.background = '#f39c12';
+                    sparkle.style.borderRadius = '50%';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animation = 'sparkle 1s ease-out forwards';
+                    
+                    this.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 1000);
+                }
+            });
+        });
+
+        // Добавление CSS анимации для искорок
+        const sparkleStyle = document.createElement('style');
+        sparkleStyle.textContent = `
+            @keyframes sparkle {
+                0% {
+                    opacity: 1;
+                    transform: scale(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1.5) rotate(180deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(sparkleStyle);
+
+        // Оптимизация производительности для мобильных устройств
+        if (window.innerWidth <= 768) {
+            // Уменьшение количества анимаций на мобильных
+            document.querySelectorAll('.particle').forEach(particle => {
+                particle.style.animationDuration = '15s';
+            });
+            
+            // Упрощение эффектов hover на мобильных
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('touchstart', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.01)';
+                });
+                
+                card.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(0) scale(1)';
+                    }, 200);
+                });
+            });
+        }
+
+        // Эффект типичной алхимической реакции при скролле
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop) {
+                // Скролл вниз - добавляем больше огненных частиц
+                if (Math.random() > 0.95) {
+                    createTemporaryParticle('fire');
+                }
+            } else {
+                // Скролл вверх - добавляем водяные частицы
+                if (Math.random() > 0.95) {
+                    createTemporaryParticle('water');
+                }
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        function createTemporaryParticle(type) {
+            const particle = document.createElement('div');
+            particle.className = `particle ${type}`;
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = '100%';
+            particle.style.animationDuration = '3s';
+            particle.style.opacity = '0.8';
+            
+            document.getElementById('particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
